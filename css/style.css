@@ -1,0 +1,258 @@
+/* Basic Reset & Root Variables */
+:root {
+    --widget-bg: #000000;
+    --widget-text: #ffffff;
+    --widget-text-subtle: #aaaaaa;
+    --widget-accent: #ffffff; /* Accent for active tab */
+    --widget-border-subtle: #333333;
+    --widget-image-size: 100px; /* Default image size */
+    --widget-padding: 16px;
+    --font-family: 'Orbitron', 'Inter', sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue";
+}
+
+body {
+    margin: 0;
+    font-family: var(--font-family);
+    background-color: #f0f0f0; /* Example page background */
+    padding: 20px; /* Example page padding */
+}
+
+/* Container to control widget size */
+.widget-container {
+    max-width: 450px; /* Max width of the widget */
+    width: 100%;     /* Take up available width */
+    height: 150px;    /* Example fixed height, adjust as needed */
+    /* Or use aspect-ratio for proportional scaling: */
+    /* aspect-ratio: 16 / 5; */
+    margin: 20px auto; /* Center it for demo */
+    position: relative; /* Needed for absolute positioning inside if required */
+}
+
+/* Main Widget Styling */
+.lastfm-widget {
+    background-color: var(--widget-bg);
+    color: var(--widget-text);
+    display: flex;
+    flex-direction: column; /* Stack header, body, footer */
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 8px; /* Slightly rounded corners */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3); /* Subtle shadow */
+    box-sizing: border-box;
+    font-size: 1rem; /* Base font size */
+}
+
+/* Widget Header (Tabs & Toggles) */
+.widget__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px var(--widget-padding) 0; /* Padding top/bottom, left/right */
+    border-bottom: 1px solid var(--widget-border-subtle);
+    flex-shrink: 0; /* Prevent header from shrinking */
+}
+
+.widget__tabs {
+    display: flex;
+    gap: 10px; /* Spacing between tabs */
+}
+
+.widget__tab-button {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent; /* Placeholder for active state */
+    color: var(--widget-text-subtle);
+    font-family: inherit;
+    font-size: 0.75em; /* Smaller text for tabs */
+    font-weight: 700; /* Bold tabs */
+    padding: 8px 4px; /* Adjust padding */
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: color 0.2s ease, border-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.widget__tab-button:hover {
+    color: var(--widget-text);
+}
+
+.widget__tab-button.active {
+    color: var(--widget-accent);
+    border-bottom-color: var(--widget-accent);
+}
+
+.widget__grayscale-toggle {
+    background: none;
+    border: none;
+    color: var(--widget-text-subtle);
+    cursor: pointer;
+    padding: 4px;
+    display: flex; /* Align icon nicely */
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+.widget__grayscale-toggle svg {
+    fill: currentColor;
+}
+
+.widget__grayscale-toggle:hover {
+    color: var(--widget-text);
+}
+.widget__grayscale-toggle.active {
+     color: var(--widget-accent); /* Make toggle active state noticeable */
+}
+
+/* Widget Body (Artwork & Info) */
+.widget__body {
+    display: flex;
+    flex-grow: 1; /* Take remaining vertical space */
+    min-height: 0; /* Prevent flexbox overflow issues */
+    padding: var(--widget-padding);
+    gap: var(--widget-padding); /* Space between image and info */
+}
+
+.widget__artwork-container {
+    width: var(--widget-image-size);
+    height: var(--widget-image-size);
+    flex-shrink: 0; /* Prevent image container from shrinking */
+    position: relative; /* For loading overlay */
+    overflow: hidden; /* Ensure image stays contained */
+    border-radius: 4px; /* Slightly rounded corners for artwork */
+}
+
+.widget__artwork {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area without stretching */
+    background-color: var(--widget-border-subtle); /* Placeholder bg */
+    transition: filter 0.3s ease; /* Smooth grayscale transition */
+}
+
+.widget__artwork.grayscale {
+    filter: grayscale(100%);
+}
+
+.widget__loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: var(--widget-text);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8em;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.lastfm-widget.loading .widget__loading-overlay {
+    opacity: 1;
+}
+
+
+.widget__info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Vertically center text */
+    min-width: 0; /* Prevent text overflow from pushing layout */
+}
+
+.widget__title {
+    font-size: 1.1em;
+    font-weight: 700; /* Bold title */
+    margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.widget__subtitle {
+    font-size: 0.9em;
+    color: var(--widget-text-subtle);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px; /* Add margin if playcount is present */
+}
+
+.widget__playcount {
+    font-size: 0.8em;
+    color: var(--widget-text-subtle);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.widget__playcount:empty {
+    display: none; /* Hide if no playcount data */
+}
+
+
+/* --- Responsive Adjustments --- */
+
+@media (max-width: 768px) {
+    :root {
+        --widget-image-size: 80px;
+        --widget-padding: 12px;
+    }
+    .widget__title {
+        font-size: 1em;
+    }
+    .widget__subtitle {
+        font-size: 0.85em;
+    }
+    .widget__tab-button {
+        font-size: 0.7em;
+        padding: 6px 2px;
+    }
+    .widget__tabs {
+        gap: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+     /* Optional: Stack image and text on very small screens */
+    /* .widget__body {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .widget__artwork-container {
+        margin-bottom: var(--widget-padding);
+         width: 100%;
+         height: auto;
+         aspect-ratio: 1 / 1; // Make it square relative to width
+    }
+     .widget__info {
+         align-items: center;
+     } */
+
+    :root {
+        --widget-image-size: 60px;
+        --widget-padding: 10px;
+    }
+     .widget__title {
+        font-size: 0.9em;
+    }
+    .widget__subtitle {
+        font-size: 0.8em;
+    }
+     .widget__tab-button {
+        font-size: 0.65em;
+        padding: 5px 1px;
+    }
+     .widget__tabs {
+        gap: 4px;
+    }
+    .widget__header {
+        padding: 6px var(--widget-padding) 0;
+    }
+}
